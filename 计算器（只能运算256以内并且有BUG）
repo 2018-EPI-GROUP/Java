@@ -1,0 +1,172 @@
+ #include<stdio.h>
+#include<malloc.h>
+
+
+char opset[5]={'+','-','*','/','#'};
+
+
+typedef char DataType; 
+typedef struct Stacknode{
+	DataType data;
+	struct Stacknode *next;
+	
+}slStacktype,*Head;
+
+
+void pirintLinkList(slStacktype *p)
+
+{
+//头结点是没有数据域的 
+while(p->next!=NULL)
+{
+	printf("%d\n",p->next->data);
+	p=p->next;
+}
+	
+}
+
+
+int Weight(char x){
+	switch (x)
+	{
+		case '#':return 0;
+		case '+':return 1;
+		case '-':return 1;
+		case '*':return 2;
+		case '/':return 2;
+		
+	}
+}
+
+int PushLstack(slStacktype *top,DataType x){
+	slStacktype *p;
+	p=(slStacktype*)malloc(sizeof(slStacktype));//相当于在这时候已经给P开辟了空间 
+
+	p->data=x;
+	p->next=top->next;
+	top->next=p;
+	return 1;
+		
+}
+
+char Pop_stack(slStacktype *top){
+	slStacktype *p;
+	DataType c;
+	if(top->next==NULL)
+	return 0;
+	p=top->next;
+	top->next=p->next;
+	c=p->data;
+	free(p);
+	return c;
+}
+
+void IntiStack(slStacktype **top)
+{
+	slStacktype *p;
+	p=(slStacktype*)malloc(sizeof(slStacktype));
+	*top=p; 
+	p->next=NULL;	
+ } 
+
+int In(char x,char a[4]){
+	int i;
+	for(i=0;i<5;i++)
+	if(a[i]==x)
+	return 1;
+	return 0;
+}
+
+int Compare(slStacktype *p,char ch2){
+	char cur;
+	cur=p->next->data;
+	if(Weight(cur)>Weight(ch2))
+	return 1;
+	return 0;
+	
+	
+}
+
+int Calculationg(char op,char e1,char e2){
+	switch(op)
+	{
+		case '+':return e1+e2;
+		case '-':return e1-e2;
+		case '*':return e1*e2;
+		case '/':return e1/e2;
+	}
+	
+}
+
+char Gettop(slStacktype *p)
+{
+	slStacktype *h;
+	h=p;
+	return h->next->data;
+}
+
+int Val()
+{
+	char ch,data,x,op,ch2,ch1,ch3;
+	int data_2,val,e1,e2,i=0;
+	slStacktype *OPRD;
+	slStacktype *OPTR;
+	OPTR=(slStacktype *)malloc(sizeof(slStacktype));
+	OPRD=(slStacktype *)malloc(sizeof(slStacktype));
+	IntiStack(&OPRD);
+	IntiStack(&OPTR);
+	PushLstack(OPTR,'#');
+
+	printf("请输入一个表达式并以#结束 :\n");
+	
+	ch=getchar();
+	
+	while(ch!='#'||Gettop(OPTR)!='#')
+	{
+		if(!In(ch,opset))
+		{
+			
+			data=ch-'0';
+			ch=getchar();
+			while(!In(ch,opset)){
+			data=data*10+ch-'0';
+			ch=getchar();
+			}
+			
+			PushLstack(OPRD,data);
+		}
+
+		else
+		{
+		if(!Compare(OPTR,ch))
+		{
+		PushLstack(OPTR,ch);
+		ch=getchar();
+		}
+			else
+			{
+				
+				ch2=Pop_stack(OPRD);
+				ch1=Pop_stack(OPRD);
+				
+				x=Pop_stack(OPTR);
+				ch3=Calculationg(x,ch1,ch2);
+				PushLstack(OPRD,ch3);
+				
+
+			}
+		
+		}
+		
+		
+	}
+	printf("%d",ch3);
+	
+}
+
+main()
+{
+	Val();
+	
+	
+}
