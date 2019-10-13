@@ -111,8 +111,7 @@ int Val()
 	int data_2,val,e1,e2,i=0;
 	slStacktype *OPRD;
 	slStacktype *OPTR;
-	OPTR=(slStacktype *)malloc(sizeof(slStacktype));
-	OPRD=(slStacktype *)malloc(sizeof(slStacktype));
+
 	IntiStack(&OPRD);
 	IntiStack(&OPTR);
 	PushLstack(OPTR,'#');
