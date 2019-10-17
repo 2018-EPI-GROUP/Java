@@ -1,3 +1,5 @@
+
+暴力解法，思维简单，但执行时间过于长为 o(n的平方)
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         for(int i = 0;i<nums.length;i++){
