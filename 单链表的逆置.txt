@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <malloc.h>
+typedef struct LNode
+{
+    int data;
+    struct LNode *next;
+}LNode,*Linklist;
+Linklist Insertlist_last(Linklist head)
+{
+    Linklist p;
+    Linklist q;
+    int i;
+    head=(Linklist)malloc(sizeof(LNode));
+    head->next=NULL;
+    q=head;
+    scanf("%d",&i);
+    while(i!=0)
+    {
+        p=(Linklist)malloc(sizeof(LNode));
+        //scanf("%d",&p->data);
+        p->data=i;
+        q->next=p;
+        q=p;
+        scanf("%d",&i);
+    }
+    q->next=NULL;
+    return head;
+}
+
+
+Linklist change(Linklist head)
+{
+    Linklist p,q;
+    p = head->next;    
+    head->next = NULL; 
+    while(p != NULL)
+    {
+        q = p;
+        p = p->next;
+        q->next = head->next;  
+        head->next = q;
+    }
+    return head;
+}
+
+int main()
+{
+    Linklist head,star;
+    int get;
+    head=Insertlist_last(head);
+    head=change(head);
+    star=head->next;
+    while(star)
+    {
+        printf("%d  ",star->data);
+        star=star->next;
+    }
+    return 0;
+}

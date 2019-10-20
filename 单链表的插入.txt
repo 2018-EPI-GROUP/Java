@@ -1,0 +1,71 @@
+#include 
+struct node
+{
+int data;
+node *next=NULL;
+};
+
+void add(int a,node *head)
+{
+node *t=head;
+while(t->next!=NULL)
+{
+t=t->next;
+}
+node *p=new node;
+p->data=a;
+p->next=NULL;
+t->next=p;
+}
+
+void newadd(int a,int x,node *head)
+{
+node *t=head;
+while(–x)
+{
+t=t->next;
+}
+node *p=new node;
+p->data=a;
+p->next=t->next;
+t->next=p;
+}
+
+void print(node *head)
+{
+node *t=head->next;
+while(t!=NULL)
+{
+if(t->next==NULL)
+printf("%d\n",t->data);
+else printf("%d “,t->data);
+t=t->next;
+}
+}
+
+int main()
+{
+int n,a,x;
+while(~scanf(”%d",&n))
+{
+node *head=new node;
+head->next=NULL;
+for(int i=0;i<n;i++)
+{
+scanf("%d",&a);
+add(a,head);
+}
+scanf("%d%d",&x,&a);
+if(x<1||x>n)
+{
+printf(“error!”);
+}
+else
+{
+newadd(a,x,head);
+print(head);
+}
+}
+    return 0;
+1
+}
