@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.xiyou.mapper.mateMapper">
+    <select id="selectAll" resultType="Classmate">
+        select * from ssmbuild.classmates
+    </select>
+    <select id="fuzzySelect" resultType="Classmate">
+        select * from ssmbuild.classmates where name like #{name}
+    </select>
+    <delete id="delMate">
+        delete from ssmbuild.classmates where id = #{id}
+    </delete>
+    <insert id="addMate" parameterType="Classmate">
+        insert into ssmbuild.classmates set id =#{id}, name =#{name},age =#{age},sex=#{sex},hobby=#{hobby}
+    </insert>
+    <update id="updateMate" parameterType="Classmate">
+        update ssmbuild.classmates set name = #{name},age=#{age},sex=#{sex},hobby=#{hobby} where id=#{id}
+    </update>
+    <select id="selectById" resultType="Classmate">
+        select * from ssmbuild.classmates where id =#{id}
+    </select>
+</mapper>
