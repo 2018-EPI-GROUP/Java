@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<malloc.h>
+struct node{
+	int data;
+	struct node *next;
+};
+struct node * create()
+{
+	struct node *head,*tail,*p;int a;
+	head=(struct node *)malloc(sizeof(struct node));
+	head->next=NULL;
+	tail=head;
+	while(scanf("%d",&a)&&a!=-1)
+	{
+		p=(struct node*)malloc(sizeof(struct node));
+		p->data=a;
+		p->next=NULL;
+		tail->next=p;
+		tail=p;
+	}
+	return (head);
+}
+	void reverse(struct node *head)
+	{
+		struct node *p,*q;
+		p=head->next;
+		head->next=NULL;
+		q=p->next;
+		while(p!=NULL)
+		{
+			p->next=head->next;
+			head->next=p;
+			p=q;
+			if(q)
+			q=q->next;
+		}
+	}
+	void print(struct node *head)
+	{
+		struct node *q;
+		q=head->next;
+		while(q!=NULL)
+		{
+			printf("%d",q->data);
+			if(q->next!=NULL)
+			printf(" ");
+			q=q->next;
+		}
+		printf("\n");
+	}
+	int main()
+	{
+		struct node *h;
+		h=create();
+		reverse(h);
+		print(h);
+		return 0;
+	}
