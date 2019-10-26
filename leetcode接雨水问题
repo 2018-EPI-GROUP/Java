@@ -1,0 +1,60 @@
+leetcode 42题接雨水 看题目觉得很有意思
+题目 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+解法一 数据结构 入栈
+如果指针cur指向的height数组中的值小于等于栈顶元素或者栈为空，我们就一直入栈，因此我们栈顶元素索引对应的height数组的值是整个栈中最小的。
+一旦指针cur指向的height数组中的值超过栈顶的元素索引对应的height数组的值，就代表栈顶元素有一个右边界。由于栈中的元素都是递减的，
+如果存在一个比栈顶元素大的栈中元素，则一定可以确定该横向区域内的盛水量。
+class Solution {
+    public int trap(int[] height) {
+ int n = height.length, result = 0; 
+        if (n == 0 || n == 1) { 
+            return result; 
+        }
+        int cur = 0; 
+        Stack<Integer> stack = new Stack<>(); 
+        while (cur < n) {
+            while (!stack.isEmpty() && height[cur] > height[stack.peek()]) {
+                int top = stack.pop();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int distance = cur - stack.peek() - 1;
+                int tempHeight = Math.min(height[cur], height[stack.peek()]) - height[top];
+                result += tempHeight * distance;
+            }
+            stack.push(cur);
+            cur++;
+        }
+        return result;
+    }
+}
+
+
+
+从整个数组的角度看来，如果找到某一索引i左侧的最大值leftMax，以及索引i右侧的最大值rightMax，
+就可以知道当前索引i的盛水高度为Math.min(leftMax, rightMax) - height[i]。
+第二种
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+        int result = 0;
+        if (n == 0 || n == 1) {
+            return result;
+        }
+        for (int i = 1; i < n - 1; i++) {
+            int leftMax = 0;
+            for (int j = 0; j < i; j++) {
+                leftMax = Math.max(leftMax, height[j]);
+            }
+            int rightMax = 0;
+            for (int j = i + 1; j < n; j++) {
+                rightMax = Math.max(rightMax, height[j]);
+            }
+            int min = Math.min(leftMax, rightMax);
+            if (min > height[i]) {
+                result += min - height[i];
+            }
+        }
+        return result;
+    }
+}
