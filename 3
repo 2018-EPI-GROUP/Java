@@ -1,0 +1,64 @@
+#include<iostream>
+#include<cstring >
+#include<cstdio>
+using namespace std;
+
+char t[1000];
+
+char p[100];
+int lent,lenp,next[100];
+//nxet算法
+void get_next()
+{
+	int i=1,j=0;
+next[1]=0;
+while(i<lenp)
+{
+	while(j>0&&p[i]!=p[j])
+		j=next[j];
+
+
+	i++;
+	j++;
+
+	if(p[i]==p[j])
+		next[i]=next[j];
+	else next[i]=j;
+}
+
+	}
+
+//KMP算法
+int KMP()
+{
+	int ora=0,i=0,j=1;
+	get_next();
+	while(i<=lent&&j<=lenp)
+		if(j==0||t[i]==p[j])
+		{
+			i++;
+			j++;
+
+		}
+		else j=next[j];
+		if(j>lenp)
+			return i-lenp;
+		else return -1;
+
+}
+int main()
+{
+	int k;
+	scanf("%d",&k);
+	while(k--)
+	{
+		scanf("%s %s",p,t);
+		lenp=strlen(p);
+		lent=strlen(t);
+		printf("%d\n",KMP());
+
+	}
+	return 0;
+
+}
+
