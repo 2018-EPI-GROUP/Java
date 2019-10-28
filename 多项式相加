@@ -1,0 +1,137 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct  math_X{
+	int xi;
+	int zhi;
+	struct  math_X *next;
+}Elemsn;
+//创建单链表保存多项式的系数、指数 
+Elemsn *creat(int k)
+{
+	Elemsn *h=NULL,*t,*p;
+	int m,n,i;
+	t=h;
+	while(i<k)
+	{
+		scanf("(%d,%d)",&m,&n);
+		p=(Elemsn *)malloc(sizeof(Elemsn));
+		p->xi=m;
+		p->zhi=n;
+		if(!h) h=t=p;
+		else t=t->next=p;
+		++i;
+	}
+	t->next=NULL;
+	return h;
+}
+//多项式输出
+void print(Elemsn *h)
+{
+	Elemsn *p;
+	int flag=1;
+	for(p=h;p;p=p->next,flag++)
+	{
+		if(p->xi>0&&flag!=1) putchar('+');
+		if(p->xi!=1&&p->xi!=-1)
+		{
+			printf("%d",p->xi);
+			if(p->zhi==1) putchar('X');
+			else if(p->zhi) printf("X^%d",p->zhi);
+		}
+		else
+		{
+			if(p->xi==1)
+			{
+				if(!p->zhi) putchar('1');
+				else if(p->zhi==1) putchar('X');
+				else printf("X^%d",p->zhi); 
+			}
+			else
+			{
+				if(!p->zhi) putchar('-1');
+				else if(p->zhi==1) putchar('-X');
+				else printf("-X^%d",p->zhi);
+			}
+		}
+	}
+	printf("\n");
+ } 
+//两个多项式相加
+Elemsn *Add_AB(Elemsn *h1,Elemsn *h2)
+{
+	Elemsn *p,*q,*h3=NULL,*t;
+	t=h3;
+	for(p=h1,q=h2;p&&q;)
+	{
+		if(p->zhi==q->zhi)
+		{
+			p->xi=p->xi+q->xi;
+			h1=h1->next;
+			h2=h2->next;
+			free(q);
+			if(p->xi!=0)
+			{
+				if(!h3) {
+				t=h3=p;//将节点连接到h3上
+				
+				}
+				
+				else {t=t->next=p;
+				//t=t->next;
+				}
+			
+			}
+			else
+			{ 
+			//t->next=h2;
+			free(p);
+			}
+			
+		}
+		else if(p->zhi<q->zhi)
+		{
+			//h1=h1->next;
+			h1=h1->next;
+			if(!h3) t=h3=p;//将节点连接到h3上
+			else {t=t->next=p;
+				//t=t->next;
+				}
+		}
+		else
+		{
+			 h2=h2->next;
+			if(!h3) t=h3=q;//将节点连接到h3上
+			else {t=t->next=q;
+				//t=t->next;
+				}
+		}
+		t->next=NULL;
+		p=h1;
+		q=h2;
+	}
+	if(p)
+	{
+		t->next=p;
+	}
+	else
+	{
+		t->next=q;
+	}
+	return h3;
+} 
+int main()
+{
+	Elemsn *h1,*h2,*h3;
+	int n,m;
+	scanf("%d",&n);
+	getchar();
+	h1=creat(n);
+	scanf("%d",&m);
+	getchar();
+	h2=creat(m);
+	h3=Add_AB(h1,h2);
+	printf("多项式相加：\n") ;
+	print(h3);
+	return 0;
+}
