@@ -2,26 +2,26 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 class SleepMethodTest extends JFrame{
-    private Thread t;
-    private static Color[] color={
+    private Thread t;                                            //定义线程
+    private static Color[] color={                                //定义颜色数组
             Color.BLACK,Color.BLUE,Color.CYAN,Color.GREEN,Color.ORANGE,Color.YELLOW,Color.RED,Color.PINK,Color.LIGHT_GRAY};
-    private  static  final Random rand=new Random();
-    private static Color getC() {
+    private  static  final Random rand=new Random();                  //创建随机对象
+    private static Color getC() {                                     //获取随机颜色
         return color[rand.nextInt(color.length)];
     }
     public SleepMethodTest(){
         t=new Thread(new Runnable() {
 
-            int x=300;
+            int x=300;                                                 //定义初始坐标
             int y=500;
             public void run() {
                 while (true){
                     try{
-                        Thread.sleep(1000);
+                        Thread.sleep(1000);                              //休眠一秒
                     }catch(InterruptedException e){
                         e.printStackTrace();
                     }
-                    Graphics graphics=getGraphics();
+                    Graphics graphics=getGraphics();                    //获取组件绘图
                     graphics.setColor(getC());
                     graphics.drawLine(x,y,1000,y++);
                     if(y>=800){
@@ -35,7 +35,7 @@ class SleepMethodTest extends JFrame{
     public static void main(String[] args){
         init(new SleepMethodTest(),100,100);
     }
-    public static void init(JFrame frame,int width,int height){
+    public static void init(JFrame frame,int width,int height){             //初始化程序界面
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width, height);
 
