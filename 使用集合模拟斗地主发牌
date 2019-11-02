@@ -1,0 +1,72 @@
+package Fight_dizhu;
+
+import Demo9.Ca;
+//import com.sun.org.apache.xpath.internal.operations.String;//不要手误！！！
+import java.util.*;
+
+public class Send_cards {
+    public static void main(String[] args) {
+        String [] Numebers = {"3","4","5","6","7","8","9","10","J","Q","K","A","2"};
+        String [] colors = {"♦","♣","♥","♠"};
+        int num = 0;
+
+        Map<Integer,String> Cards = new HashMap();
+        List <Integer>list = new ArrayList<>();
+
+        for(String i:Numebers)
+            for(String j:colors){
+                String card = i+j;
+                Cards.put(num,card);
+                list.add(num);
+                num++;
+            }
+        Cards.put(num,"小王");
+        list.add(num++);
+        Cards.put(num,"大王");
+        list.add(num++);
+        Collections.shuffle(list);
+
+
+        List<String> Player1 = new ArrayList<>();
+        List<String> Player2 =new ArrayList<>();
+        List<String> Player3 =new ArrayList<>();
+        List<String> HideCards =new ArrayList<>();
+        for(int i= 51; i < 54; i++) HideCards.add(Cards.get(list.get(i)));
+
+        List s1 = Sent_Cards(0,Player1,Cards,list);
+        List s2 = Sent_Cards(1,Player2,Cards,list);
+        List s3 =Sent_Cards(2,Player3,Cards,list);
+
+
+        System.out.println(HideCards);
+
+        System.out.println("第一个玩家的牌"+Revers(s1,Cards));
+        System.out.println("第二个玩家的牌"+Revers(s2,Cards));
+        System.out.println("第三个玩家的牌"+Revers(s3,Cards));
+        System.out.println("底牌是");
+        for(int i= 0; i < 3; i++) System.out.print(HideCards.get(i)+" ");
+
+
+    }
+
+    public static List  Sent_Cards(int i,List player,Map cards,List s){
+        List c = new ArrayList();
+        for(int j = i*17 ; j < (i+1)*17 ; j++){
+            player.add(cards.get(s.get(j)));
+            c.add(s.get(j));
+        }
+        return c;
+
+    }
+    public static String Revers(List s,Map map){
+        List cur = new ArrayList();
+        String cur2 ="";
+        Collections.sort(s);
+        for(int i = 0;i<s.size();i++){
+            cur2=cur2+(map.get(s.get(i)))+"  ";
+        }
+        return cur2;
+
+
+    }
+}
