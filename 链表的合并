@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+struct node
+{
+	int data;
+	struct node *next;
+};
+struct node *create(int x)
+{
+	struct node *head,*tail,*p;
+	int j;
+	head=(struct node *)malloc(sizeof(struct node));
+	head->next=NULL;
+	tail=head;
+	for(j=1;j<=x;j++)
+	{
+		p=(struct node*)malloc(sizeof (struct node));
+		scanf("%d",&p->data);
+		p->next=NULL;
+		tail->next=p;
+		tail=p;
+
+	}
+	return head;
+}
+struct node *merge(struct node *h1,struct node *h2)
+{
+	struct node *p1,*p2,*tail;
+	p1=h1->next;
+	p2=h2->next;
+	tail=h1;
+	free(h2);
+	while(p1&&p2)
+	{
+		if(p1->data<p2->data)
+		{
+			tail->next=p1;
+			tail=p1;
+			p1=p1->next;
+		}
+		else
+		{
+			tail->next=p2;
+			tail=p2;
+			p2=p2->next;
+		}
+	}
+	if(p1)
+		tail->next=p1;
+	else
+		tail->next=p2;
+	return h1;
+}
+void print(struct node *h)
+{
+	struct node *q;
+	q=h->next;
+	while(q!=NULL)
+	{
+		printf("%d",q->data);
+		if(q->next!=NULL)
+			printf(" ");
+		q=q->next;
+	}
+	printf("\n");
+}
+int main()
+{
+	struct node *h1,*h2,*h;
+	int n,m;
+	scanf("%d%d",&n,&m);
+	h1=create(n);
+	h2=create(m);
+	h=merge(h1,h2);
+	print(h);
+	return 0;
+}
