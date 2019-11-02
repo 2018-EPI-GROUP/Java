@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+void main(void)
+{
+	char data; 
+	char* string="ea15de*^#@$^sdf";
+	int i=0;
+	int IsFind=0;
+	printf("请输入一个ea15de*^#@$^sdf中存在的字符:\n");
+	scanf("%c",&data);
+	getchar(); 
+	for (i = 0; i < strlen(string); i++)
+	{
+		if(string[i]==data)
+		{
+			IsFind=1;
+			break;
+		}
+	}
+	if(IsFind)
+	{
+		printf("你所查找的字符位于：%d位置!\r\n",i);
+	}
+	else
+	{
+		printf("你所查找的字符不存在!\r\n");
+	}
+}
