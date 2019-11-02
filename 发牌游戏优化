@@ -1,0 +1,99 @@
+学！
+发牌的排序不能通过Arrays.sort()来排序
+因为数据类型转不过来
+学习这种新方法
+对于最后自定义比较器还是有些模糊，再多看几遍
+冲！
+package com.epi;                                        //创建包epi
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
+
+
+
+public class Game {
+
+    private static int point = 0;// 序号指针
+
+    public static void main(String[] args) {
+        List<Poke> list = new ArrayList<Poke>();// 一个空的扑克牌盒子
+        String[] arr1 = { "红桃", "黑桃", "梅花", "方块" };// 四种花色
+        String[] arr2 = { "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", }; // 13位数值
+        list.add(new Poke(point++, "大王")); // 将大王放到盒子中
+        list.add(new Poke(point++, "小王")); // 将小王放到盒子中
+        for (int i = 0; i < arr1.length; i++) {
+            for (int j = 0; j < arr2.length; j++) {
+                list.add(new Poke(point++, arr1[i] + arr2[j])); // 依次放其余52张牌到盒子中
+            }
+        }
+        Collections.shuffle(list); // 将ArrayList随机打乱，模拟洗牌
+        TreeSet<Poke> last = new TreeSet<Poke>(new MyCompare()); // 底牌
+        TreeSet<Poke> one = new TreeSet<Poke>(new MyCompare()); // 玩家1的牌
+        TreeSet<Poke> two = new TreeSet<Poke>(new MyCompare()); // 玩家2的牌
+        TreeSet<Poke> three = new TreeSet<Poke>(new MyCompare()); // 玩家3的牌
+        for (int i = 0; i < 54; i++) { // 模拟发牌
+            if (i < 3) { // 选三张底牌
+                last.add(list.get(i));
+            } else if (i % 3 == 0) { // 给玩家1发牌
+                one.add(list.get(i));
+            } else if (i % 2 == 0) { // 给玩家2发牌
+                two.add(list.get(i));
+            } else { // 给玩家3发牌
+                three.add(list.get(i));
+            }
+        }
+        printSet(last);// 看底牌
+        printSet(one); // 看玩家1的牌
+        printSet(two); // 看玩家2的牌
+        printSet(three);// 看玩家3的牌
+
+    }
+
+    private static void printSet(TreeSet<Poke> pokes) {// 模拟看牌的方法
+        for (Iterator<Poke> iterator = pokes.iterator(); iterator.hasNext();) {    //没有指针下移操作，只是判断是否存在下一个元素
+            Poke poke = iterator.next();         //指针下移
+            System.out.print(poke.getName() + " ");
+        }
+        System.out.println();
+    }
+
+}
+
+class Poke {// 扑克牌类
+    private int code;// 扑克牌序号，用来对牌排序
+    private String name;// 扑克牌名称，用来对牌排序
+
+    public Poke(int code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
+
+class MyCompare implements Comparator<Poke> {// 自定义比较器
+
+
+    public int compare(Poke o1, Poke o2) {// 通过比较牌的序号来确定排序位置
+        return o1.getCode() - o2.getCode();
+    }
+
+}
