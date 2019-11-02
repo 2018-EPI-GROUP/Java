@@ -8,3 +8,73 @@
 （5）.发牌（三个序列获取元素）
 （6）.输出三名玩家对应集合
 三.程序（待考核）
+问题（太粗糙，不遵守java编程规范，学的太慢，需要规范命名，尽可能多加一点东西）
+
+package com.epi;                                        //创建包epi
+import java.util.ArrayList;                         //导入java.util.ArrayList类
+import java.util.Collections;                       //导入java.util.Collections类
+import java.util.List;                              //导入java.util.List类
+import java.util.*;                                 //导入java.util.*类
+
+public class Game{                          //创建类 发牌游戏
+
+
+    public static void main(String[] args) {                   //  加入牌元素
+        String[] arr1 = {"♠", "♥", "♣", "♦"};
+        String[] arr2 = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        List<String> ArrayList0 = new ArrayList<>();                 //实例化牌组
+        for (int i = 0; i < arr1.length; i++) {               //得牌阶段
+            for (int j = 0; j < arr2.length; j++) {
+                ArrayList0.add(arr1[i] + arr2[j]);
+            }
+        }
+        ArrayList0.add("大王");                            //将大王，小王元素添加到集合中
+        ArrayList0.add("小王");
+        // 命名
+        List<String> ArrayList1 = new ArrayList<>();           //实例化玩家一，二，三集合
+        List<String> ArrayList2 = new ArrayList<>();
+        List<String> ArrayList3 = new ArrayList<>();
+
+
+        Collections.shuffle(ArrayList0);
+        //随机打乱有序数组，洗牌阶段
+
+        for (int i = 0; i < ArrayList0.size() - 3; i++) {    //保留三张底牌，摸牌阶段
+            if (i % 3 == 0) {                      //玩家一拿牌
+                ArrayList1.add(ArrayList0.get(i));
+            } else if (i % 3 == 1) {               //玩家二拿牌
+                ArrayList2.add(ArrayList0.get(i));
+            } else {                              //玩家三拿牌
+                ArrayList3.add(ArrayList0.get(i));
+            }
+        }
+        boolean b1, b2, b3;                          //叫地主阶段
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("玩家一是地主");
+        b1 = scanner.nextBoolean();
+        System.out.println("玩家二是地主");
+        b2 = scanner.nextBoolean();
+        System.out.println("玩家三是地主");
+        b3 = scanner.nextBoolean();
+
+
+        System.out.println("玩家一得到的牌" + ArrayList1);       //展示玩家当前所得的牌
+        System.out.println("玩家二得到的牌" + ArrayList2);
+        System.out.println("玩家三得到的牌" + ArrayList3);
+        System.out.println("底牌为");                       //展示底牌
+        for (int i = 1; i < 4; i++) {
+            System.out.println(ArrayList0.get(ArrayList0.size() - i) + ",");
+        }
+        if (b1) {
+            for (int i = 1; i < 4; i++)
+                ArrayList1.add(ArrayList0.get(ArrayList0.size() - i));
+            System.out.println("玩家一为地主，手牌为" + ArrayList1);
+        } else if (b2) {
+            for (int i = 1; i < 4; i++)
+                ArrayList2.add(ArrayList0.get(ArrayList0.size() - i));
+            System.out.println("玩家二为地主，手牌为" + ArrayList2);
+        } else if (b3) {
+            for (int i = 1; i < 4; i++)
+                ArrayList3.add(ArrayList0.get(ArrayList0.size() - i));
+            System.out.println("玩家三为地主，手牌为" + ArrayList3);
+        }
