@@ -1,0 +1,65 @@
+需求分析：
+
+
+总共54张牌，需要存储进去（定义花色，牌号）
+特殊牌：大小王
+遍历
+洗牌（shuffle乱序）
+发牌
+k看牌
+
+代码实现：
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Test2 {
+
+    public static void main(String[] args) {
+       
+            //定义54张牌的集合
+            List<String> poker = new ArrayList<>();
+            // 定义一个数组/集合存储4中花色
+            String[] colors = {"梅花", "方片", "红桃", "黑桃"};
+            //定义一个数组/集合存储2 A K...3
+            String[] nums = {"A","1","2","3","4","5","6","7","8","9","J","Q","K"};
+            //存储大小王
+            poker.add("大王");
+            poker.add("小王");
+            //循环遍历组合两个数组/集合，组装52张牌
+            for (String num : nums) {
+                for (String color : colors){
+                    //将52张牌也存储到poker集合中
+                    poker.add(color+num);
+                }
+            }
+            //2.洗牌;使用集合工具类Collections的方法shuffle(List<?> list)随机打乱集合元素的数据
+            Collections.shuffle(poker);
+            //定义4个集合，存储3个玩家的牌：
+            List<String> one = new ArrayList<>();
+            List<String> two = new ArrayList<>();
+            List<String> three = new ArrayList<>();
+            List<String> dipai = new ArrayList<>();
+            //要求一人17张牌，剩余三张作为底牌，一人一张轮流发牌：集合的索引%3
+            for (int i = 0; i < poker.size(); i++) {
+                if (i < 51){  //51个正常牌
+                    if (i % 3 == 0){
+                        one.add(poker.get(i));
+                    }else if (i % 3 == 1){
+                        two.add(poker.get(i));
+                    }else {
+                        three.add(poker.get(i));
+                    }
+                }else {
+                    dipai.add(poker.get(i));
+                }
+            }
+            //4.看牌：直接打印集合/遍历集合
+            System.out.println("张三的牌：" + one);
+            System.out.println("李四的牌：" + two);
+            System.out.println("王五的牌：" + three);
+            System.out.println("底牌：" + dipai);
+        }
+
+    }
