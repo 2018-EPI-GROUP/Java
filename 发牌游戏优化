@@ -5,12 +5,12 @@
 对于最后自定义比较器还是有些模糊，再多看几遍
 冲！
 package com.epi;                                        //创建包epi
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.ArrayList;                             //导入java.util.ArrayList类，ArrayList可变数组
+import java.util.Collections;                           //导入java.util.Collections类 Collection接口
+import java.util.Comparator;                            //导入java.util.Comparator类  返回对此set中的元素进行排序的比较器
+import java.util.Iterator;                              //导入java.util.Iterator类，Collection的元素上进行迭代的迭代器，用于遍历集合中的对象
+import java.util.List;                                  //导入java.util.List接口
+import java.util.TreeSet;                               //导入java.util.TreeSet，set集合
 
 
 
@@ -19,7 +19,7 @@ public class Game {
     private static int point = 0;// 序号指针
 
     public static void main(String[] args) {
-        List<Poke> list = new ArrayList<Poke>();// 一个空的扑克牌盒子
+        List<Poke> list = new ArrayList<Poke>();       // 一个空的扑克牌盒子
         String[] arr1 = { "红桃", "黑桃", "梅花", "方块" };// 四种花色
         String[] arr2 = { "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", }; // 13位数值
         list.add(new Poke(point++, "大王")); // 将大王放到盒子中
@@ -30,10 +30,11 @@ public class Game {
             }
         }
         Collections.shuffle(list); // 将ArrayList随机打乱，模拟洗牌
-        TreeSet<Poke> last = new TreeSet<Poke>(new MyCompare()); // 底牌
-        TreeSet<Poke> one = new TreeSet<Poke>(new MyCompare()); // 玩家1的牌
-        TreeSet<Poke> two = new TreeSet<Poke>(new MyCompare()); // 玩家2的牌
-        TreeSet<Poke> three = new TreeSet<Poke>(new MyCompare()); // 玩家3的牌
+
+        TreeSet<Poke> last = new TreeSet<Poke>(new MyCompare());       // 底牌      TreeSet类实现set类按指定比较器递增排序
+        TreeSet<Poke> one = new TreeSet<Poke>(new MyCompare());        // 玩家1的牌
+        TreeSet<Poke> two = new TreeSet<Poke>(new MyCompare());     // 玩家2的牌
+        TreeSet<Poke> three = new TreeSet<Poke>(new MyCompare());   // 玩家3的牌
         for (int i = 0; i < 54; i++) { // 模拟发牌
             if (i < 3) { // 选三张底牌
                 last.add(list.get(i));
@@ -45,15 +46,15 @@ public class Game {
                 three.add(list.get(i));
             }
         }
-        printSet(last);// 看底牌
-        printSet(one); // 看玩家1的牌
-        printSet(two); // 看玩家2的牌
-        printSet(three);// 看玩家3的牌
+        printSet(last);       // 看底牌
+        printSet(one);        // 看玩家1的牌
+        printSet(two);        // 看玩家2的牌
+        printSet(three);      // 看玩家3的牌
 
     }
 
     private static void printSet(TreeSet<Poke> pokes) {// 模拟看牌的方法
-        for (Iterator<Poke> iterator = pokes.iterator(); iterator.hasNext();) {    //没有指针下移操作，只是判断是否存在下一个元素
+        for (Iterator<Poke> iterator = pokes.iterator(); iterator.hasNext();) {    //没有指针下移操作，只是判断是否存在下一个元素，没有下一个元素时退出循环
             Poke poke = iterator.next();         //指针下移
             System.out.print(poke.getName() + " ");
         }
@@ -62,37 +63,37 @@ public class Game {
 
 }
 
-class Poke {// 扑克牌类
-    private int code;// 扑克牌序号，用来对牌排序
-    private String name;// 扑克牌名称，用来对牌排序
+class Poke {                 // 扑克牌类
+    private int code;        // 扑克牌序号，用来对牌排序(定义一个int型成员变量)
+    private String name;     // 扑克牌名称，用来对牌排序(定义一个String型成员变量)
 
-    public Poke(int code, String name) {
+    public Poke(int code, String name) {     //定义poke有参构造方法，可以为成员变量赋值
         this.code = code;
         this.name = name;
     }
 
-    public int getCode() {
+    public int getCode() {        //getCode方法中，方法返回值为int类，使用return code形式将int类对象返回
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(int code) {      //定义一个setCode()方法，将参数值赋予类中的成员变量
         this.code = code;
     }
 
-    public String getName() {
+    public String getName() {        //getName方法中，方法返回值为String类，使用return name形式将String类对象返回
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) {  //定义一个setName()方法，将参数值赋予类中的成员变量
         this.name = name;
     }
 
 }
 
-class MyCompare implements Comparator<Poke> {// 自定义比较器
+class MyCompare implements Comparator<Poke> {// 自定义比较器，创建类实现Comparator()方法，是返回此set中元素进行排序的比较器
 
 
-    public int compare(Poke o1, Poke o2) {// 通过比较牌的序号来确定排序位置
+    public int compare(Poke o1, Poke o2) {    // 通过比较牌的序号来确定排序位置
         return o1.getCode() - o2.getCode();
     }
 
