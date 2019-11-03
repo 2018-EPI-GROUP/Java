@@ -1,0 +1,89 @@
+public class HairCard {
+    public static void main(String[] args) {
+        ArrayList<String> box=setcard();//按顺序的排
+
+        ArrayList<String> M=new ArrayList<>();
+        ArrayList<String> Z=new ArrayList<>();
+        ArrayList<String> L=new ArrayList<>();
+        //洗牌
+        ArrayList<String> boxNew=newCard(box);//随机的牌
+        //发牌
+        ArrayList<String> arrlast=peopleCard(boxNew,M,Z,L);//arrlast集合为所剩下的底牌
+        System.out.println(arrlast);
+        Random num=new Random();
+        int i=num.nextInt(3)+1;//随机生成三个数使得底牌发给地主
+        System.out.println(i);
+        if(i==1){
+            System.out.println("M为地主，得到底牌：");
+            GiveDiCard(arrlast,M);
+        }else if(i==2){
+            System.out.println("Z为地主，得到底牌：");
+            GiveDiCard(arrlast,Z);
+        }else {
+            System.out.println("L为地主，得到底牌：");
+            GiveDiCard(arrlast,L);
+        }
+        System.out.println("M:"+ M);
+        System.out.println("Z:"+Z);
+        System.out.println("L:"+L);
+        System.out.println(arrlast);
+
+
+    }
+    //设置牌
+    public static ArrayList<String> setcard(){
+        //设置牌
+        String[] color={"黑桃","方片","红桃","梅花"};
+        String[] number={"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        ArrayList<String> box=new ArrayList<>();
+
+        for(int i=0;i<color.length;++i){//将牌的具体类型存到集合中
+            for(int j=0;j<number.length;++j){
+                box.add(color[i]+number[j]);
+            }
+        }
+        box.add("大王");
+        box.add("小王");
+        return box;
+    }
+    //打乱牌的顺序
+    public static ArrayList<String> newCard(ArrayList<String> box){
+        ArrayList<String> boxnew=new ArrayList<>();
+        int cont=box.size();
+        while(cont>0){
+            Random i=new Random();
+            int id=i.nextInt(cont);
+            String arre=box.get(id);
+            box.remove(id);//移除box中的一个元素
+            boxnew.add(arre);
+            cont--;
+        }
+        return boxnew;
+    }
+    //发牌
+    public static ArrayList<String> peopleCard(ArrayList<String> boxNew,ArrayList<String> M,ArrayList<String> Z,ArrayList<String> L) {
+        ArrayList<String> arrlast = new ArrayList<>();
+        int i;
+        for (i = 0; i < boxNew.size() - 3; ++i) {
+            if (i % 3 == 0) {
+
+                M.add(boxNew.get(i));
+            } else if (i % 3 == 1) {
+                Z.add(boxNew.get(i));
+            } else {
+                L.add(boxNew.get(i));
+            }
+        }
+        for (int j = i; j < boxNew.size(); ++j) {
+            arrlast.add(boxNew.get(j));
+        }
+        return arrlast;
+    }
+    public static void GiveDiCard(ArrayList<String> arrlast,ArrayList<String> N){
+        for(int i=0;i<arrlast.size();++i){
+            N.add(arrlast.get(i));
+        }
+        arrlast.clear();
+    }
+
+}
