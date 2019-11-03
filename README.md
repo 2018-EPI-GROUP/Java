@@ -1,7 +1,7 @@
 # SSM框架整合实现商城增删查该
 
 ## 商城主页
-[https://kanjing-files.oss-cn-beijing.aliyuncs.com/SSM/%E4%B8%BB%E9%A1%B5%28%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%29.png]
+![商城主页](https://kanjing-files.oss-cn-beijing.aliyuncs.com/SSM/%E4%B8%BB%E9%A1%B5%28%E5%95%86%E5%93%81%E5%88%97%E8%A1%A8%29.png)
 
 ## 商品详情
 [https://kanjing-files.oss-cn-beijing.aliyuncs.com/SSM/%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85.png]
