@@ -72,7 +72,7 @@ class Poke {                 // 扑克牌类
         this.name = name;
     }
 
-    public int getCode() {        //getCode方法中，方法返回值为int类，使用return code形式将int类对象返回
+    public int getCode() {        //getCode()方法中，方法返回值为int类，使用return code形式将int类对象返回
         return code;
     }
 
@@ -80,7 +80,7 @@ class Poke {                 // 扑克牌类
         this.code = code;
     }
 
-    public String getName() {        //getName方法中，方法返回值为String类，使用return name形式将String类对象返回
+    public String getName() {        //getName()方法中，方法返回值为String类，使用return name形式将String类对象返回
         return name;
     }
 
