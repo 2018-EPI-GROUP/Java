@@ -56,7 +56,7 @@ public class Game {
     private static void printSet(TreeSet<Poke> pokes) {// 模拟看牌的方法
         for (Iterator<Poke> iterator = pokes.iterator(); iterator.hasNext();) {    //没有指针下移操作，只是判断是否存在下一个元素，没有下一个元素时退出循环
             Poke poke = iterator.next();         //指针下移
-            System.out.print(poke.getName() + " ");
+            System.out.print(poke.getName() + " "); //输出牌
         }
         System.out.println();
     }
@@ -67,7 +67,7 @@ class Poke {                 // 扑克牌类
     private int code;        // 扑克牌序号，用来对牌排序(定义一个int型成员变量)
     private String name;     // 扑克牌名称，用来对牌排序(定义一个String型成员变量)
 
-    public Poke(int code, String name) {     //定义poke有参构造方法，可以为成员变量赋值
+    public Poke(int code, String name) {     //定义Poke有参构造方法，可以为成员变量赋值
         this.code = code;
         this.name = name;
     }
