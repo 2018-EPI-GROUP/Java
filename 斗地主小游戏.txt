@@ -1,0 +1,39 @@
+只学到了多态，没有学到面向异常和多线程
+package cn.incast.day10.demo02;
+
+import java.util.ArrayList;
+
+public class pukeGame {
+    public static void main(String[] args) {
+        String[] color = {"♥","♦","♠","♣"};
+        String[] figure = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        ArrayList<String> puke = new ArrayList<>();
+        for (int i = 0; i < color.length; i++) {
+            for (int j = 0; j < figure.length; j++) {
+                puke.add(color[i]+figure[j]);
+            }
+        }
+        puke.add("小王");
+        puke.add("大王");
+        ArrayList<String> one = new ArrayList<>();
+        ArrayList<String> two = new ArrayList<>();
+        ArrayList<String> three = new ArrayList<>();
+        for (int i = 0; i < puke.size()-3; i++) {
+            if (i%3==0){
+                one.add(puke.get(i));
+            }else if (i%3==1) {
+                two.add(puke.get(i));
+            }else if (i%3==2){
+                three.add(puke.get(i));
+            }
+        }
+        System.out.println(one);
+        System.out.println(two);
+        System.out.println(three);
+        for (int i = 1; i < 4; i ++){
+
+            System.out.print(puke.get(puke.size()-i)+",");
+
+        }
+    }
+}
