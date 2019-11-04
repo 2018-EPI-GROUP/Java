@@ -1,0 +1,22 @@
+学
+JFrame窗口
+import java.awt.*;          //导入awt包
+import javax.swing.*;        //导入swing包
+public class Example1 extends JFrame{                        //定义类Example类继承JFrame类
+    public void CreateJFrame(String title) {                 //定义CreateJFrame方法
+        JFrame jf = new JFrame(title);                       //实例化一个JFrame对象
+        Container container = jf.getContentPane();           //获取一个容器
+        JLabel jl = new JLabel("这是一个窗口");          //创建一个JLabel标签
+        jl.setHorizontalAlignment(SwingConstants.CENTER);    //设置标签中文字居中
+        container.add(jl);                                    //将标签添加到容器内
+        container.setBackground(Color.white);                //将容器背景颜色设置为白色
+        jf.setVisible(true);                                 //使窗口可视
+        jf.setSize(200, 150);                  //设置窗口大小
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);     //设置窗口关闭方式
+    }
+   
+     public static void main(String[] args) {
+        new Example1().CreateJFrame("创建一个JFrame窗口");        //在主方法中调用CreateJFrame方法
+
+    }
+}
