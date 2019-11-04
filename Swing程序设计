@@ -20,3 +20,57 @@ public class Example1 extends JFrame{                        //定义类Example�
 
     }
 }
+
+JDialog窗口实现从一个窗体弹出另一个窗体
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+public class MyFrame extends JFrame {
+    public void MyFrame(){
+        JFrame jf=new JFrame();//实例化一个JFrame对象
+        Container container=jf.getContentPane();//将窗体转化为容器
+
+        container.setLayout(null);
+        JLabel jl=new JLabel("这是一个JFrame窗体");//在窗体中设置标签
+        jl.setHorizontalAlignment(JLabel.CENTER);//将标签中的文字置于标签中间的位置
+        container.add(jl);//将标签添加到容器中
+
+        JButton jb=new JButton("测试");//实例化一个按钮属性
+        jb.setBounds(20, 20,100, 50);
+        jb.addActionListener(new ActionListener() {           //为按钮添加鼠标单击事件
+
+            public void actionPerformed(ActionEvent e) {
+                //使MyJDialog窗体可见
+                new MyJDialog(MyFrame.this).setVisible(true);             //使对话框窗体可见，实现当用户点击该按钮时弹出对话框
+
+            }
+        });
+        container.add(jb);//将按钮属性添加到容器中
+
+        container.setBackground(Color.white);  //设置容器背景颜色
+
+        jf.setTitle("按钮测试");//设置容器的标题
+        jf.setVisible(true);//设置容器可视化
+        jf.setSize(450, 400);//设置容器的大小
+
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);      //设置容器的关闭方式
+    }
+    public static void main(String[] args) {
+        MyFrame fm=new MyFrame();          //在主方法中调用MyFrame方法
+        fm.MyFrame();
+    }
+}
+class MyJDialog extends JDialog{
+
+    public MyJDialog(MyFrame frame){                  //定义构造方法
+        //实例化一个JDialog类对象，指定对话框的父窗体，窗体标题，和类型
+        super(frame,"第一个JDialog窗体",true);
+        Container container=getContentPane();           //创建一个容器
+        container.add(new JLabel("测试成功"));//在容器中添加标签
+        container.setBackground(Color.yellow);
+        setBounds(120,120,100,100);
+
+    }
+}
