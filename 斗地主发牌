@@ -1,0 +1,42 @@
+package demo05;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+public class d01 {
+    public static void main(String[] args) {
+        ArrayList<String> poker = new ArrayList<>();
+        String[] color = {"♠","♥","♣","♦"};
+        String[] number = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        poker.add("大王");
+        poker.add("小王");
+        for(String numbers:number){
+            for(String colors:color){
+                poker.add(colors+numbers);
+            }
+        }
+        Collections.shuffle(poker);//打乱牌
+        ArrayList<String> play01 = new ArrayList<>();
+        ArrayList<String> play02 = new ArrayList<>();
+        ArrayList<String> play03 = new ArrayList<>();
+        ArrayList<String> diPai = new ArrayList<>();
+        for (int i = 0;i<poker.size();i++){
+            String a = poker.get(i);
+            if (i>=51){
+                diPai.add(a);
+            }else if (i%3==0){
+                play01.add(a);
+            }else if (i%3==1){
+                play02.add(a);
+            }else if (i%3==2){
+                play03.add(a);
+            }
+        }
+        System.out.println("玩家1："+play01);
+        System.out.println("玩家2："+play02);
+        System.out.println("玩家3："+play03);
+        System.out.println("底牌："+diPai);
+
+    }
+}
