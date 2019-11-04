@@ -1,21 +1,35 @@
 package Demo02;
 
-import static java.lang.Math.abs;
-
-//给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
 public class Solution {
-    public static int reverse(int x){
-        long end = 0;
-
-        while(x != 0){
-            int num = x % 10;
-            x /= 10;
-            end = end * 10 + num;
-        }
-        return (end<Integer.MIN_VALUE||end>Integer.MAX_VALUE)? 0:(int)end;
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) {val = x; }
     }
 
-    public static void main(String[] args) {
-        System.out.println(reverse(1));
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        //每次从俩个链表中各取一个数字，知道俩个链表都到末尾
+        ListNode head = new ListNode(0);//定义一个不带数据的头结点，省去了待会判断是不是第一个结点的操作
+        ListNode r = head;   //始终指向末尾结点，尾插法
+
+        int z = 0;
+        while(l1 != null || l2 != null || z != 0){
+
+            int res1 = l1 == null ? 0:l1.val;
+            int res2 = l2 == null ? 0:l2.val;
+
+            ListNode sumNode = new ListNode((res1+res2 + z)%10);
+            r.next = sumNode;
+            r = sumNode;
+
+            z = (res1 + res2 + z)/10;
+            if(l1 != null){
+                l1 = l1.next;
+            }
+            if(l2 != null){
+                l2 = l2.next;
+            }
+        }
+        return head.next;
     }
 }
