@@ -1,0 +1,97 @@
+/*请实现函数Elemsn *clone(Elemsn *h)  复制一个复杂链表，在复杂链表中每个节点，除了有一个next指针指向下一个节点以外，还有一个
+randon_next指针指向链表中随机的某个节点或NULL，节点定义如下：
+typedef struct node{
+	int date;
+	struct node * next;//指向下一节点 
+	struct node * random_next;//指向随机节点 
+}Elemsn;
+*/
+
+
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node{
+	int date;
+	struct node * next;
+	struct node * random_next;
+}Elemsn;
+//新复杂链表的创建 
+Elemsn *creatlink(int date[],int n)
+{
+	Elemsn *h=NULL,*t,*newp;
+	int i;
+	for (int i=0;i<n;++i){
+		newp=(Elemsn *)malloc(sizeof(Elemsn));
+		newp->date=date[i];
+		newp->next=NULL;
+		if (!h) h=t=newp;
+		else t=t->next=newp;
+	}
+	//链接随机节点 
+	t->random_next=h->next->next;
+	for(newp=h;newp->next;newp=newp->next)
+	{
+		newp->random_next=newp->next->next;
+	}
+	return h;
+}
+//链表的输出 
+void printlink(Elemsn *h)
+{
+	Elemsn *p;
+	printf("\n原链表的节点：\n");
+	for (p=h;p;p=p->next)
+	{
+		printf("%d  ",p->date);
+	}
+	printf("\n链表的顺序节点：\n"); 
+	for (p=h;p;p=p->next)
+	{
+		printf("%x  ",p);
+	}
+	printf("\n链表的随机节点：\n"); 
+	for(p=h;p;p=p->next)
+	{
+		printf("%x  ",p->random_next);
+	 } 
+}
+Elemsn *clone(Elemsn *h)
+{
+	Elemsn *p,*pn,*hn=NULL,*t;
+	//建立新链表实现copy的节点插入到原节点之后（边建边插） 
+	for(p=h;p;p=p->next->next)
+	{
+		pn=(Elemsn *) malloc(sizeof(Elemsn));
+		pn->date=p->date;
+		pn->next=p->next;
+		p->next=pn;
+	 }
+	// printf("**");
+	//对随机节点进行赋值
+	for(p=h;p;p=p->next->next)
+	{
+		if (p->random_next==NULL) p->next->random_next=p->random_next;
+		else p->next->random_next=p->random_next->next;
+	}
+	//将copy的新节点从原链表中删除
+	for(p=h;p;p=p->next)
+	{
+		pn=p->next;
+		p->next=pn->next;
+		if(!hn) hn=t=pn;
+		else t=t->next=pn;
+	 }
+	return hn;
+
+ }
+int main(void)
+{
+	Elemsn *head;
+	int date[8]={1,2,3,4,5,6,7,8};
+	head=creatlink(date,8);
+	printf("原链表的输出\n" );
+	printlink(head);
+	printf("\n新链表如下：\n\n\n");
+	head=clone(head);
+	printlink(head);
+ } 

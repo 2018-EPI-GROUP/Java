@@ -1,0 +1,201 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 100       
+#define N 8
+//数据类型定义
+int board[8][8]={0};           //定义棋盘
+
+typedef struct state       //定义栈类型
+{          
+	int hang[MAX];                  //横坐标
+    int lie[MAX];                  //纵坐标
+    int director[MAX];           //存储方向
+    int top;
+}state;         //定义一个栈数组
+
+typedef struct posite{
+	int h;
+	int l;
+}node;
+
+node Htry[8]={{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
+ 
+//int top=-1;                //栈指针
+
+//置空栈
+state *Initstack()
+{
+	state *s;
+	s=(state *)malloc(sizeof(state));
+	s->top=-1;
+	return s;
+} 
+
+//判断栈是否为空
+int Empty(state *s)
+{
+	if(!(s->top+1)) return 1;
+	else return 0;
+ } 
+
+//入栈
+int Push(state *s,node next)
+{
+	if(!(s->top-99))
+	{
+		printf("栈满\n");
+		return 0;
+	}
+	else
+	{
+		s->top++;				//栈指针前移 
+		s->hang[s->top]=next.h;//下一个位置的行、列分别入栈 
+		s->lie[s->top]=next.l;
+		return 1;
+	}
+}
+
+//出栈 
+int Pop(state *s)
+{
+	if(Empty(s))
+	{
+		printf("栈空");
+		return 0; 
+	}
+	else
+	{
+		board[ s->hang[s->top] ][ s->lie[s->top] ]=0;//清除棋盘的标记
+		s->top--;									//栈指针前移退栈
+		return 1;
+	}
+}
+ //判断下一步是否合法
+int the_steptrue(node next)
+{
+ 	if(board[next.h][next.l]==0&&next.h>=0&&next.h<8&&next.l>=0&&next.l<8)	return 1;
+ 	else	return 0;    
+}
+
+//探寻路径函数模块
+int TryPath(state *s)//传入初始位置 
+{
+	node next,next_next,b[8];
+    int find,director,number,min;  //定义几个临时变量
+    int i,j,k;              //定义几个临时变量
+	int a[8],d[8];    //定义几个临时数组
+	find=0; 			//表示没有找到下一个位置
+    while(s->top>-1)                 //栈不空时循环
+    {
+    	for(i=0;i<8;i++)    //用数组a[8]记录当前位置的下一个位置的可行路径的条数
+        {
+			number=0;
+            next.h=s->hang[s->top]+Htry[i].h;
+            next.l=s->lie[s->top]+Htry[i].l;
+            b[i].h=next.h;
+            b[i].l=next.l;
+            if(the_steptrue(next))    //如果找到下一位置
+            {
+            	for(j=0;j<8;j++)
+                {
+                    next_next.h=b[i].h+Htry[j].h;
+                    next_next.l=b[i].l+Htry[j].l;
+                    if(the_steptrue(next_next))
+                    //如果找到下一位置
+                    number++;              //记录条数
+                }
+                a[i]=number;                   //将条数存入数组a[8]中
+            }
+        }
+        for(i=0;i<8;i++)     //根据可行路径条数小到大按下表排序放入数组d[8]中
+        {
+            min=9;
+            for(j=0;j<8;j++)
+    		if(min>a[j])
+            {
+                min=a[j];
+                d[i]=j;    //将下表存入数组d[8]中
+                k=j;
+            }
+            a[k]=9;
+        }
+        director=s->director[s->top];
+        for(i=director+1;i<8;i++)   //向八个方向进行探寻
+        {
+            next.h=s->hang[s->top]+Htry[d[i]].h;
+            next.l=s->lie[s->top]+Htry[d[i]].l;
+            if(the_steptrue(next)) //如果找到下一位置
+            {
+                find=1;       //表示找到下一个位置
+                break;
+            }
+        }
+        if(find==1)          //如果找到下一个位置进栈
+        {
+            s->director[s->top]=director; //存储栈结点的方向
+            Push(s,next);             //栈指针前移进栈
+            s->director[s->top]=-1;    //重新初始化下一栈结点的尝试方向
+            board[next.h][next.l]=s->top+1;         //标记棋盘
+        }
+        else                           //否则退栈
+        {
+        	Pop(s);
+        }
+        if(s->top>=63)                 //如果走完整个棋盘返回1
+        return (1);
+        
+    }
+    return (0);
+}
+
+//输出路径函数模块
+void Display()
+{
+    int i,j;
+    for(i=0;i<N;i++)
+    {
+        for(j=0;j<N;j++)
+            printf("\t%d  ",board[i][j]);  //输出马儿在棋盘上走过的                路径
+    printf("\n\n");
+    }
+    printf("\n");
+}
+//起始坐标函数模块
+void InitLocation(node start)
+{
+    //int x,y;
+	state *s;
+	s=Initstack();            //定义棋盘的横纵坐标变量
+    s->top++;                  //栈指针指向第一个栈首
+    s->hang[s->top]=start.h;        //将起始位置的横坐标进栈
+    s->lie[s->top]=start.l;        //将起始位置的纵坐标进栈
+    s->director[s->top]=-1; //将起始位置的尝试方向赋初值
+    board[start.h][start.l]=s->top+1;    //标记棋盘
+    if(TryPath(s))       //调用马儿探寻函数，如果马儿探寻整个棋盘返回1否则返回0
+    	Display();         //输出马儿的行走路径
+    else
+    	printf("无解");
+}
+
+//主程序模块
+int main()
+{   
+	node start;      
+    while(1)
+    {
+        printf("Please input importpoint(1<=x<=8 and 1<=y<=8)\n\n");
+        printf("请输入起始位置的横坐标 hang = ");
+        scanf("%d",&start.h);         //输入起始位置的横坐标
+        printf("\n");
+        printf("输入起始位置的纵坐标 lie = ");
+        scanf("%d",&start.l);         //输入起始位置的纵坐标
+        printf("\n");
+        if(start.h>=1&&start.h<=8&&start.l>=1&&start.l<=8) break;
+        printf("Your input is worng!!!\n");
+    }
+    start.h-=1;
+    start.l-=1;
+    printf("begin with %d board:\n\n", 8*(start.h-1)+start.l);
+    InitLocation(start);      //调用起始坐标函数
+        return 0;
+}
