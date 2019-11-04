@@ -1,0 +1,12 @@
+class Solution {
+    public int reverse(int x) {
+        long count=0;
+        for (int i=x;i>0||i<0;i/=10){
+            count=count*10+i%10;
+        }
+        if(count<Integer.MIN_VALUE||count>Integer.MAX_VALUE){
+             count=0;
+        }
+        return (int) count;
+    }
+}
