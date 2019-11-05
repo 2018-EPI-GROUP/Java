@@ -1,5 +1,7 @@
-//单选按钮显示一个圆形图标
-//复选按钮具有一个方块图标
+//提交按钮显示图标和文本标签，JButton  设置成员变量jb
+//单选按钮显示一个圆形图标，JRadioButton 设置成员变量jr
+//复选框具有一个方块图标,JCheckBox     设置成员变量jc
+
 import java.awt.Container;//容器
 import java.awt.GridLayout;//网格布局
 
@@ -18,9 +20,9 @@ public class Test extends JFrame{
     private JRadioButton jr2;
     private ButtonGroup bg1;      //定义按钮组
 
-    private JCheckBox cb1;         //喜爱的运动可以多选（篮球，足球，排球）
-    private JCheckBox cb2;
-    private JCheckBox cb3;
+    private JCheckBox jc1;         //喜爱的运动可以多选（篮球，足球，排球）
+    private JCheckBox jc2;
+    private JCheckBox jc3;
 
 
     private JLabel jl1;            //定义标签（提交）（重置）
@@ -34,9 +36,9 @@ public class Test extends JFrame{
     private JButton jb2;
     public Test(){
         Container container=getContentPane();//获取一个容器
-        cb1=new JCheckBox("篮球");      //三个复选框
-        cb2=new JCheckBox("足球");
-        cb3=new JCheckBox("排球");
+        jc1=new JCheckBox("篮球");      //三个复选框
+        jc2=new JCheckBox("足球");
+        jc3=new JCheckBox("排球");
 
         jl1=new JLabel("你喜欢的运动");     //标签1 文本
         jl2=new JLabel("你的性别");         //标签2
@@ -51,9 +53,9 @@ public class Test extends JFrame{
         setLayout(new GridLayout(3, 1));//设置网格布局管理器3行1列
         jp1=new JPanel();//实例化面板一
         jp1.add(jl1);//加入标签一“你喜欢什么运动”
-        jp1.add(cb1);//将篮球，排球，足球三个单选按钮添加到面板上面
-        jp1.add(cb2);
-        jp1.add(cb3);
+        jp1.add(jc1);//将篮球，排球，足球三个单选按钮添加到面板上面
+        jp1.add(jc2);
+        jp1.add(jc3);
         container.add(jp1);//在容器中添加面板
 
         jp2=new JPanel();//实例化面板二
