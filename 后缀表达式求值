@@ -1,0 +1,60 @@
+#include<stdio.h>
+
+typedef struct STRACK
+{
+	 double a[100];
+	 int top;
+} STRACK;
+
+int main()
+{
+	 double totle=0,e=0;
+	 char s[100];
+	 int i;
+	 STRACK L;
+	  L.top=-1;
+	 gets(s);
+for(i=0; s[i]!='@'; i++)
+ {
+ 	if(s[i]<='9'&&s[i]>='0')
+ 	{
+ 		L.top++;
+		int temp=s[i]-'0';
+	     int k=i+1;
+ 		while(s[k]!='@') 
+ 		{
+ 			if(s[k]<='9'&&s[k]>='0')
+ 			{
+ 				temp=10*temp+(s[k]-'0');
+ 				i++;
+ 				k++;
+ 			}
+				else break;
+ 				}
+				 L.a[L.top]=temp;
+				}
+ 				else if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/') 
+ 				{
+ 					switch(s[i])
+ 					{
+ 						case '+':
+						e=L.a[L.top-1]+L.a[L.top];
+ 						break;
+						case '-':
+ 						e=L.a[L.top-1]-L.a[L.top];
+						 break;
+						 case '*':
+						 e=L.a[L.top-1]*L.a[L.top];
+						 break;
+						 case '/':
+						 e=L.a[L.top-1]/L.a[L.top];
+						 break;
+ 					}
+					 L.a[L.top-1]=e; 
+					 L.a[L.top]=0;
+					 L.top--;
+			 }
+ 		}
+			 printf("%.0lf",L.a[L.top]); 
+			 return 0;
+}
