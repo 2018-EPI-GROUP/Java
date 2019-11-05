@@ -1,0 +1,20 @@
+import javax.swing.*;
+public class Demo3 extends JFrame {
+    public void GUI() {
+        setTitle("图像测试");
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+        ImageIcon img = new ImageIcon("src/frame/1.jpg");// 创建图片对象 相对路径(相对于工程根目录的位置)
+        label.setIcon(img);
+        panel.add(label);
+        add(panel);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);       // JFrame最大化
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// 设置JFrame关闭方式
+        setVisible(true);                              // 显示JFrame
+    }
+    public static void main(String args[]) {           //主方法内调用GUI()方法
+        Demo3 d = new Demo3();                         
+        d.GUI();
+    }
+}
+
