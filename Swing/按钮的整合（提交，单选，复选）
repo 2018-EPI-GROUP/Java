@@ -1,0 +1,83 @@
+//单选按钮显示一个圆形图标
+//复选按钮具有一个方块图标
+import java.awt.Container;//容器
+import java.awt.GridLayout;//网格布局
+
+import javax.swing.ButtonGroup;//按钮组
+import javax.swing.JButton;//提交按钮
+import javax.swing.JCheckBox;//复选框
+import javax.swing.JFrame;//窗体
+import javax.swing.JLabel;//标签
+import javax.swing.JPanel;//面板
+import javax.swing.JRadioButton;//单选按钮
+import javax.swing.WindowConstants;//窗口关闭方式
+
+public class Test extends JFrame{
+
+    private JRadioButton jr1;    //男性，女性，性别单选
+    private JRadioButton jr2;
+    private ButtonGroup bg1;      //定义按钮组
+
+    private JCheckBox cb1;         //喜爱的运动可以多选（篮球，足球，排球）
+    private JCheckBox cb2;
+    private JCheckBox cb3;
+
+
+    private JLabel jl1;            //定义标签（提交）（重置）
+    private JLabel jl2;
+
+    private JPanel jp1;            //网络布局三行一列
+    private JPanel jp2;
+    private JPanel jp3;
+
+    private JButton jb1;
+    private JButton jb2;
+    public Test(){
+        Container container=getContentPane();//获取一个容器
+        cb1=new JCheckBox("篮球");      //三个复选框
+        cb2=new JCheckBox("足球");
+        cb3=new JCheckBox("排球");
+
+        jl1=new JLabel("你喜欢的运动");     //标签1 文本
+        jl2=new JLabel("你的性别");         //标签2
+
+        jb1=new JButton("提交");            //带图标的提交按钮
+        jb2=new JButton("重置");
+
+        jr1=new JRadioButton("男");         //性别单选框
+        jr2=new JRadioButton("女");
+        bg1=new ButtonGroup();                    //设置按钮组
+
+        setLayout(new GridLayout(3, 1));//设置网格布局管理器3行1列
+        jp1=new JPanel();//实例化面板一
+        jp1.add(jl1);//加入标签一“你喜欢什么运动”
+        jp1.add(cb1);//将篮球，排球，足球三个单选按钮添加到面板上面
+        jp1.add(cb2);
+        jp1.add(cb3);
+        container.add(jp1);//在容器中添加面板
+
+        jp2=new JPanel();//实例化面板二
+        jp2.add(jl2);//加入标签二“你的性别”
+        bg1.add(jr1);//将性别“男”，“女”两个单选按钮添加到ButtonGroup
+        bg1.add(jr2);
+        jp2.add(jr1);//将这两个单选按钮添加到面板2上
+        jp2.add(jr2);
+        container.add(jp2);
+
+        jp3=new JPanel();
+        jp3.add(jb1);//将两个提交按钮直接添加到面板3上
+        jp3.add(jb2);
+        container.add(jp3);
+
+        setTitle("按钮的运用");//标题
+        setSize(400,300);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+    public static void main(String[] args) {
+
+        new Test();
+    }
+
+}
+//写的惨兮兮但出来笑嘻嘻
