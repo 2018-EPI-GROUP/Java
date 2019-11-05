@@ -1,0 +1,48 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct node{
+	char data;
+	struct node *next;
+}LinkStack;
+int judgement(char *p){
+	int i;
+	LinkStack *top,*r,*s,*temp;
+	top = (LinkStack *)malloc(sizeof(LinkStack));
+	if(top==NULL){
+		printf("overflow");
+	
+	}
+	top->next=NULL;
+	s=top;
+	for(i=0;i<strlen(p);i++){
+		r = (LinkStack *)malloc(sizeof(LinkStack));
+		r->data = p[i];
+		r->next = NULL;
+		s->next = r;
+		s = s->next;
+	}
+	for(i=strlen(p)-1;i>=0;i--){
+		temp = top->next;
+		if(temp->data == p[i]){
+			top->next = temp->next;
+			free(temp);
+		}
+		else{
+			break;
+		}
+	}
+	if(i==-1)
+	return 1;
+	else
+	return 0;
+	
+	
+}
+int main(void){
+	char arr[]="repaper";
+	if(judgement(arr))
+	printf("shi");
+	else
+	printf("bushi");
+}
