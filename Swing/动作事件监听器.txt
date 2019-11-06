@@ -1,0 +1,27 @@
+package com.zyx;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+public class Demo17 extends JFrame{
+    public Demo17() {
+        setBounds(100,100,200,200);//设置窗体坐标和大小
+        setDefaultCloseOperation(EXIT_ON_CLOSE);//设置窗体关闭规则，关闭窗口时关闭程序
+        Container c=getContentPane();
+        c.setLayout(new FlowLayout());//设置窗体使用流布局管理器
+        JButton jb=new JButton("按钮");
+        final int[] i = {0};
+        jb.addActionListener(new ActionListener() {//添加动作监听
+            public void actionPerformed(ActionEvent e) {//想要知道被点击了多少次
+                i[0]++;
+                System.out.println("我被点击次数："+ i[0]);
+            }
+        });
+        c.add(jb);
+        setVisible(true);//设置窗体为可见
+    }
+    public static void main(String[] args) {
+        new Demo17();
+    }
+}

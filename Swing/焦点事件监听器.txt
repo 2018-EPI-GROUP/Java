@@ -1,0 +1,71 @@
+package com.zyx;
+
+
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class EventDemo{
+    static JLabel jl1=new JLabel();
+    static JLabel jl=new JLabel();
+    static int clicks;
+    private static void setPage(){
+        //1.设置窗口的大小
+        JFrame jf=new JFrame("获取点击鼠标的次数");
+        jf.setPreferredSize(new Dimension(300, 300));//设置窗口大小
+        BorderLayout flo=new BorderLayout();//设置边界布局格式
+        JPanel jp=new JPanel(flo);//获取面板
+        jf.add(jp);//面板添加到窗口
+        JButton jb=new JButton("停止输入");
+        jb.setBackground(Color.red);//设置按钮背景色
+        jb.setForeground(Color.blue);//设置文字颜色
+        jp.add(jb,flo.NORTH);//设置位置
+
+        //为这个button设置事件属性
+        //2.添加动作监听器
+        jb.addActionListener(new ActionListener() {//为提交按钮设置动作监听器
+            public void actionPerformed(ActionEvent e) {
+                //当鼠标点击的时候，就执行+1的操作
+                jl1.setText("按钮被点击了"+(clicks++)+"次");
+            }
+        });
+        jp.add(jl1,flo.SOUTH);//关于输出次数的标签放置在面板下方位置
+
+
+
+        JPanel jpq=new JPanel();
+        jf.add(jpq,flo.EAST);//把按钮和文本框放在窗口左边
+        JTextField jla=new JTextField();
+        jla.setColumns(30);//设置文本框长度30
+        jpq.add(jla);
+        //3.设置焦点事件监听器
+        jla.addFocusListener(new FocusListener() {
+            public void focusLost(FocusEvent e) {
+                jl.setText("输入结束....");//失去焦点的时候（焦点离开文本框）
+            }
+
+            public void focusGained(FocusEvent e) {
+                jl.setText("正在输入中....."); // 获取焦点的时候（焦点回到文本框）
+            }
+        });
+
+        jpq.add(jl);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //设置窗口关闭方式（关闭程序的时候视为关闭窗口）
+        jf.setVisible(true);
+
+    }
+
+    public static void main(String[] args) {
+        setPage();
+    }
+}
