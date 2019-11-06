@@ -1,0 +1,49 @@
+//创建列表框
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+public class JListDemo  extends JFrame implements ListSelectionListener{
+
+    private JList<String> list;
+    private JTextField tf=new JTextField("文本框");
+    private  String[] color={"红色","黄色","蓝色","绿色"};
+
+    public JListDemo ( ){
+        list=new JList(color);
+        JScrollPane ps=new JScrollPane(list);
+        list.addListSelectionListener(this);
+        this.add(ps,BorderLayout.CENTER);     //JScrollPane面板置于中间，边界布局管理器
+        this.add(tf,BorderLayout.NORTH );
+        this.setTitle("列表框演示");
+        this.setSize(250,150);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+
+        JListDemo jd=new JListDemo( );
+    }
+
+    public void valueChanged(ListSelectionEvent e) {
+
+        JList jlist=(JList) e.getSource();
+        String name=(String) jlist.getSelectedValue();
+
+        if(name=="红色") tf.setBackground(Color.RED);     //选择红色时，设置背景红色
+        if(name=="黄色") tf.setBackground(Color.YELLOW);
+        if(name=="蓝色") tf.setBackground(Color.BLUE);
+        if(name=="绿色") tf.setBackground(Color.GREEN);
+
+
+    }
+
+}
