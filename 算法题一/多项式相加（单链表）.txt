@@ -1,0 +1,133 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+typedef struct poly
+{
+	int exp;//指数幂
+	int coef;//系数
+	struct poly *next;//指针域
+}PNode,*PLinklist;
+int Init(PLinklist *head)//链表初始化
+{
+	*head=(PLinklist)malloc(sizeof(PNode));
+	if(*head)
+	{
+		(*head)->next=NULL;
+		return 1;
+	}
+	else
+		return 0;
+}
+int CreateFromTail(PLinklist *head)//尾插法创建链表
+{
+	PNode *pTemp,*pHead;
+	int c;              //存放系数
+	int exp;            //存放指数
+	int i=1;            //计数器提示用户输入第几项
+	pHead=*head;
+	scanf("%d,%d",&c,&exp);
+	while(c)           //系数为零时结束输入
+	{
+		pTemp=(PLinklist)malloc(sizeof(PNode));
+		if(pTemp)
+		{
+			pTemp->exp=exp;//接收指数
+			pTemp->coef=c; //接收系数
+			pTemp->next=NULL;
+			pHead->next=pTemp;
+			pHead=pTemp;
+			scanf("%d,%d",&c,&exp);
+		}
+		else return 0;
+	}return 1;
+}
+void Polyadd(PLinklist LA,PLinklist LB)  //两个多项式相加，该方法中两个表都是按指数顺序增长
+{                            //分三种情况，A<B时将A链到LA后，A==B时比较系数，A>B时将B链到表中
+	PNode *LA1=LA->next;     //定义LA1用于在LA中移动
+	PNode *LB1=LB->next;     //定义LA2用于在LB中移动
+	PNode *temp;             //保存要删除的结点
+	int sum=0;               //存放系数的和
+	while(LA1&&LB1)
+	{
+		if(LA1->exp<LB1->exp)  //LA1对应指数比LB1对应指数低，LA1拉到LA后面
+		{
+			LA->next=LA1;
+			LA=LA->next;
+			LA1=LA1->next;
+		}
+		else if(LA1->exp==LB1->exp)//LA1,LB1对应指数相等时，系数相加
+		{
+			sum=LA1->coef+LB1->coef;
+			if(sum)//系数和不为零时，将系数存在LA1中，同时删除结点LB1
+			{
+				LA1->coef=sum;
+				LA->next=LA1;
+				LA=LA->next;
+				LA1=LA1->next;
+				temp=LB1;
+				LB1=LB1->next;
+				free(temp);
+			}
+			else//系数为零时同时删除这两个结点
+			{
+				temp=LA1;
+				LA1=LA1->next;
+				free(temp);
+				temp=LB1;
+				LB1=LB1->next;
+				free(temp);
+			}
+		}
+		else   //LA1对应结点指数大于LB1，将LB1拉到LA后面
+		{
+			LA->next=LB1;
+			LA=LA->next;
+			LB1=LB1->next;
+		} 
+	}if(LA1)//如果LB1先结束（B链先结束），把剩余结点链入链表
+	{
+		LA->next=LA1;
+	}
+	else
+		LA->next=LB1;
+}
+void Print(PLinklist head) //输出多项式
+{
+	head=head->next;
+	while(head)
+	{
+		if(head->exp)
+		{
+			printf("%dx^%d",head->coef,head->exp);
+		}
+		else
+			printf("%d",head->coef);
+		if(head->next)
+			printf("+");
+		else
+			break;
+		head=head->next;
+	}
+}
+void main()
+{
+	PLinklist LA;//多项式列表LA
+	PLinklist LB;//多项式列表LB
+	Init(&LA);
+	Init(&LB);
+	printf("输入第一个多项式的系数，指数，输入0,0结束输入\n");
+	CreateFromTail(&LA);
+	printf("输入第二个多项式的系数，指数，输入0,0结束输入\n");
+	CreateFromTail(&LB);
+	Print(LA);
+	printf("\n");
+	Print(LB);
+	printf("\n");
+	Polyadd(LA,LB);
+	printf("两个多项式相加的结果:\n");
+	Print(LA);     //相加后结果保存在LA中，打印LA
+	printf("\n");
+}
+
+
+

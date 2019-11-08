@@ -1,0 +1,76 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<conio.h>
+typedef int Elemtype;//定义数据元素类型
+typedef struct Cnode //数据类型定义
+{
+	Elemtype data;
+	struct Cnode *next;
+}CNode;
+CNode *joseph;//定义全局变量
+int Create_clist(CNode *clist,int n)//创建单循环链表
+{
+	CNode *p,*q;
+	int i;
+	clist=NULL;
+	for(i=n;i>=1;i--)
+	{
+		p=(CNode *)malloc(sizeof(CNode));//获取头结点
+		if(p==NULL)
+			return -1;//存储分配失败
+		p->data=i;    //赋值
+		p->next=clist;//p结点指向头指针
+		clist=p;//头指针移向新的结点
+		if(i==n)//用q指向链表的最后一个结点
+		{
+			q=p;
+		}
+	}
+	q->next=clist;//把链表的最后一个结点的链域指向链表的第一个结点，构成循环链表
+	joseph=clist;//把创建好的循环链表头指针赋给全局变量
+	return 1;
+}
+int Joseph(CNode *clist,int m,int n,int k)
+{
+	int i;
+	CNode *p,*q;
+	if(m>n)//m作为第几个人开始报数，当m>n时输入错误
+		return -1;
+	if(!Create_clist(clist,n))//循环链表创建失败
+		return -1;
+	p=joseph;//初始化工作指针，p指向创建好的循环链表
+	for(i=1;i<m;i++)
+		p=p->next;//p指向m位置对应的结点
+	while(p)
+	{
+		for(i=1;i<k-1;i++)
+			p=p->next;//循环做p=p->next,直到p指向第k-1个结点
+		q=p->next;
+		printf(" %d",q->data);//把该点对应数据输出
+		if(p->next==p)//即该链表中只有一个结点，删除最后一个结点
+			p=NULL;
+		else{//此时q指向该出列的人对应的结点，把q->next插到p->next后面（p指向k+1结点），删除q
+			p->next=q->next;
+			p=p->next;
+			free (q);
+		}
+	}
+	clist=NULL;
+	return 1;
+}
+void main()
+{
+	int m,n,k;
+	CNode *clist;
+	clist=NULL;//初始化clist*
+	printf("请输入围着的人数: ");
+	scanf("%d",&n);
+	printf("请输入第一次报数的人的位置: ");
+	scanf("%d",&m);
+	printf("你希望报数到第几个数的人出列？");
+	scanf("%d",&k);
+	Create_clist(clist,n);//创建一个有n个结点的循环链表clist*
+	printf("出列顺序如下: \n");
+	Joseph(clist,m,n,k);
+	printf("\n");
+}
