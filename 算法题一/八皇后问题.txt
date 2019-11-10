@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <math.h>
+#include <malloc.h>
+
+void nQueens(int *x, int n);     /*求解n皇后问题*/
+int place(int *x, int k);         /*判断是否可以在第k行第x[k]列摆放皇后*/
+void printSolution(int *x, int n);  /*输出求解结果*/
+
+int main()
+{
+    int n;
+    int *x;                        /*存放求解结果的数组首地址*/
+    scanf("%d", &n);
+    x=(int*)malloc(sizeof(int)*(n+1));  /*动态分配数组空间， x[0]空闲*/
+    nQueens(x, n);
+    return 0;
+}
+
+/*如果一个皇后能放在第k行第x[k]列，则返回真(1)，否则返回假(0)*/
+int place(int *x, int k)
+{
+    int i;
+    /*对前k-1行，逐行考察*/
+    for(i=1; i<k; i++)
+    {
+        /*如果前k-1行中有某行的皇后与第k行的在同一列或同一斜线，返回0*/
+        if((x[i]==x[k])||(fabs(x[i]-x[k])==fabs(i-k)))
+            return 0;
+    }
+    /*能执行下一句，说明在第k行第x[k]列摆放皇后，不会互相攻击*/
+    return 1;
+}
+
+/*求解在n×n的棋盘上，放置n个皇后，使其不能互相攻击*/
+void nQueens(int *x, int n)
+{
+    int k;
+    k = 1;    /*k是当前行*/
+    x[k] = 0;  /*x[k]是当前列，进到循环中，立刻就会执行x[k]++，而选择了第1列*/
+    while(k>0)/*当将所有可能的解尝试完后，k将变为0，结束求解过程*/
+    {
+        x[k]++;                      /*移到下一列*/
+        while(x[k]<=n && !place(x, k))   /*逐列考察，找出能摆放皇后的列x[k]*/
+            x[k]++;
+        if(x[k]<=n)                   /*找到一个位置可以摆放皇后*/
+        {
+            if(k==n)                  /*是一个完整的解，输出解*/
+                printSolution(x, n);
+            else  /*没有完成最后一行的选择，是部分解，转向下一行*/
+            {
+                k++;    /*接着考察下一行*/
+                x[k]=0;  /*到循环开始执行x[k]++后，下一行将从第1列开始考察*/
+            }
+        }
+        else  /*对应x[k]>n的情形，这一行已经没有再试的必要，回溯到上一行*/
+            k--;  /*上一行在原第x[k]列的下1列开始考察*/
+    }
+}
+
+/*输出求解结果*/
+void printSolution(int *x, int n)
+{
+    int i, j;
+    for (i = 1; i <= n; i++)    /*输出第i行*/
+    {
+        for (j=1; j<=n; j++)
+        {  
+            if (j == x[i])    /*第x[i]列输出Q，其他列输出*号 */
+                printf("Q");
+            else
+                printf("*");
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
