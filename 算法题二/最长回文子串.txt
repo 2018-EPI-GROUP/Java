@@ -1,0 +1,75 @@
+int n;
+
+        if (null == s || (n = s.length()) == 0) {
+
+            return "";
+
+        }
+
+        if (n < 2) {
+
+            return s;
+
+        }
+
+        if (s.length() == 2) {
+
+            if (s.charAt(0) == s.charAt(1)) {
+
+                return s;
+
+            }
+
+            return s.substring(0, 1);
+
+        }
+
+        String result = "";
+
+        for (int i = 1; i < s.length() - 1; i++) {
+
+            String odd = maxPalindrome(s, i - 1, i + 1);
+
+            String even1 = maxPalindrome(s, i - 1, i),even2 = maxPalindrome(s, i, i + 1);
+
+            if (odd.length() > result.length()) {
+
+                result = odd;
+
+            }
+
+            if (even1.length() > result.length()) {
+
+                result = even1;
+
+            }
+
+            if (even2.length() > result.length()) {
+
+                result = even2;
+
+            }
+
+        }
+
+        return result;
+
+    }
+
+
+
+    private String maxPalindrome(String s, int k, int j) {
+
+        while (k >= 0 && j < s.length() && s.charAt(k) == s.charAt(j)) {
+
+            k--;
+
+            j++;
+
+        }
+
+        return s.substring(k + 1, j);
+
+    }
+
+}

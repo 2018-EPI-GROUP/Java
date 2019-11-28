@@ -1,0 +1,22 @@
+class Solution {
+    public boolean isPalindrome(int x) {
+        
+        String string = Integer.toString(x);
+
+        int n = string.length();
+
+        for (int i = 0; i <= n >> 1; i++) {
+
+            if (string.charAt(i) != string.charAt(n - i - 1)) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+}
