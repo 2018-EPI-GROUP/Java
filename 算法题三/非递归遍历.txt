@@ -1,0 +1,75 @@
+typedef struct node//数据类型
+{
+ ElemType data;    //数据元素
+ struct node *lchild;  //指向左孩子
+ struct node *rchild;  //指向右孩子 
+} BTNode;
+
+void PreOrder(BTNode *b){     //先序遍历
+    BTNode *stack[15];
+    int top = -1;
+    BTNode *p = b;
+    while(p!=NULL||top!=-1){
+        if(p!=NULL){
+
+            stack[++ top] = p;
+            printf("%c ",p->data); //入栈时，访问输出
+            p = p->lchild;
+
+		}else{
+
+            p = stack[top --];
+            p = p->rchild;
+
+        }
+    }
+}
+
+void InOrder(BTNode *b){      //中序遍历
+    BTNode  *stack[15];
+    int top = -1;
+    BTNode  *p = b;
+    while(p!=NULL||top!=-1){
+        if(p!=NULL){
+
+            stack[++ top] = p;
+            p = p->lchild;
+
+        }else{
+
+            p = stack[top --];
+            printf("%c ",p->data);  //出栈时，访问输出
+            p = p->rchild;
+        }
+    }
+}
+
+void PostOrder(BTNode *b){     //后序遍历
+    BTNode *stack[15];
+    int top = -1;
+    int flagStack[15];   //记录每个节点访问次数栈
+    BTNode  *p = b;
+    while(p!=NULL||top!=-1){
+        if(p!=NULL){     //第一次访问，flag置1，入栈
+
+            stack[++ top] = p;
+            flagStack[top] = 1;   
+            p = p->lchild;
+
+        }else{//（p == NULL）
+
+            if(flagStack[top] == 1){  //第二次访问，flag置2，取栈顶元素但不出栈
+
+                p = stack[top];
+                flagStack[top] = 2;
+                p = p->rchild;
+
+            }else{         //第三次访问，出栈
+
+                p = stack[top --];
+                printf("%c ",p->data);    //出栈时，访问输出
+                p = NULL;      //p置空，以便继续退栈
+            }
+        }
+    }
+}

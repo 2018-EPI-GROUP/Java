@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define Stack_Init_Size 20
+#define Stack_Increasement 10
+
+typedef char Elemtype;
+
+typedef struct{
+    Elemtype *base;    //栈的栈底指针
+    Elemtype *top;     //栈顶指针
+    int stacksize;     //栈大小
+}sqStack;
+//数据结构中的栈里的每一个元素都有一个数据*base,并且每个数据都可以当作栈顶用*top表示 ，以及栈的字节大小stacksize
+ 
+
+void initStack(sqStack *s)
+{
+    s->base=(Elemtype *)malloc(Stack_Init_Size*sizeof(Elemtype));
+	//分配二十个数据的存储空间，并将空间的首地址存于s->base，分配的是存储元素的空间
+    if(!s->base)//判断空间是否分配成功
+    {
+        return;//不成功返回
+    }
+    s->top=s->base;//栈顶指针和栈底指针指向一样的地方
+
+    s->stacksize=Stack_Init_Size;//分配成功时，给s->stacksize赋初值
+}
+
+ 
+
+void push(sqStack *s,Elemtype e)
+{
+    if(s->top-s->base>=s->stacksize)//S.top-S.base表示栈中已经存放元素的个数，当这个值达到s.stacksize则栈已无空间存放要入栈的元素了 
+		//内存溢出重新分配存储空间
+    {
+        s->base=(Elemtype *)realloc(s->base,(Stack_Increasement+s->stacksize)*sizeof(Elemtype));
+        //给栈底指针分配新空间（追加十个数据的存储空间）
+        if(!s->base)//存储分配失败
+        {
+            return;
+        }
+    }
+    *(s->top)=e;//元素入栈，栈顶指针加一
+    s->top++;
+}
+
+ 
+
+void pop(sqStack *s,Elemtype *e)
+{
+    if(s->top == s->base)//空栈，返回错误
+    {
+        return;
+    }
+    s->top--;//栈顶指针减一，元素出栈
+    *e=*(s->top);
+}
+int isEmpty(sqStack s)//判空栈
+
+{
+
+    return (s.base==s.top);
+
+}
+
+ 
+
+int main()
+{
+    sqStack s;
+    initStack(&s);
+    char c,e;
+    printf("请输入所要计算的中缀表达式，以#结束！\n");
+    scanf("%c",&c);
+    while(c!='#')
+    {
+        while(isdigit(c))//头文件<ctype.h>中说明了一些用于测试字符的函数，isdigit函数当变量是十进制数字时，函数返回非0值，否则返回0。
+        {
+            printf("%c",c);//遇到运算数时，则直接将其输出（不压入堆栈）
+
+            scanf("%c",&c);  //输入下一个元素
+			//如果此刻输入#，则外层以#为结束条件的循环会无法结束，因为后面有读入的语句，此时读入的#会被“覆盖”，所以外层循环内的要判断读入的c是否是#
+           
+        }
+
+        if(')'==c)
+			//若遇到右括号，表达括号内的中缀表达式已经扫描完毕。这时需将栈顶的运算符依次弹出并输出，直至遇到左括号[左括号弹出但不输出]。
+
+        {
+            pop(&s,&e);
+            while( '(' != e )//直到遇到左括号
+            {
+                printf("%c",e);
+                pop(&s,&e);
+            }
+        }
+//如果该运算符的优先级大于栈顶运算符的优先级时，将其压栈
+
+//如果该运算符的优先级小于栈顶运算符的优先级时，将栈顶运算符弹出并输出，接着和新的栈顶运算符比较
+//若大于，则将其压栈，若小于，继续将栈顶运算符弹出并输出......(一直递归下去，直至运算符大于栈顶运算符为止)。
+        else if('+'==c ||'-'==c)//作为优先级中间级（低于*，/)
+        {
+            if(isEmpty(s))//若此时为空栈时，直接压入栈中
+            {
+                push(&s,c);
+            }
+            else
+            {
+                do
+                {
+                    pop(&s,&e);//先进行一次出栈
+                    if( '(' == e )//当退到左括号时，压栈
+                    {
+                       push(&s,e);
+                    }
+                    else//不然的话就把每次出栈的元素输出
+                    {
+                        printf("%c",e);
+                    }
+                }while(!isEmpty(s) && '('!=e);
+                push(&s,c);
+            }
+        }
+
+        else if( '*' == c || '/' == c || '(' == c )//作为优先级最高的，无论栈顶运算符是什么，都进栈
+        {
+             push(&s,c);
+        }
+        else if('#'==c)//结束输入
+        {
+            break;
+        }
+        else//输入错误表达式
+        {
+            printf("\n出错：输入格式错误！\n");
+            return -1;
+        }
+        scanf("%c",&c);
+    }
+
+    while(!isEmpty(s))//最后一步，若扫描到中缀表达式的末尾[即扫描结束]，若堆栈中还有存留的运算符依次弹出并输出即可。
+    {
+        pop(&s,&e);
+        printf("%c",e);
+    }
+
+	printf("\n");
+    return 0;
+
+}

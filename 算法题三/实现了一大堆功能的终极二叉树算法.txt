@@ -1,0 +1,324 @@
+//我们不论遇到什么困难，都不要怕
+//加油，奥利给
+#include <stdio.h>
+#include <malloc.h>
+
+#define MaxSize 100
+typedef char ElemType;
+
+typedef struct node
+{
+ ElemType data;    //数据元素
+ struct node *lchild;  //指向左孩子
+ struct node *rchild;  //指向右孩子 
+} BTNode;
+
+
+
+
+void CreateBTNode(BTNode *&b,char *str)  //由str串创建二叉链
+{
+	BTNode *St[MaxSize],*p=NULL;
+    int top=-1,k,j=0;  
+    char ch;
+    b=NULL;    //建立的二叉树初始时为空
+    ch=str[j];
+    while (ch!='\0') //str未扫描完时循环
+	{
+		switch(ch) 
+		{
+		case '(':top++;St[top]=p;k=1; break;  //为左节点
+        case ')':top--;break;
+        case ',':k=2; break;                       //为右节点
+        default:p=(BTNode *)malloc(sizeof(BTNode));
+        p->data=ch;p->lchild=p->rchild=NULL;
+        if (b==NULL)                    //p指向二叉树的根节点
+        b=p;
+        else         //已建立二叉树根节点
+		{ 
+			switch(k) 
+			{
+			case 1:St[top]->lchild=p;break;
+            case 2:St[top]->rchild=p;break;
+			}
+		}
+		}
+		j++;
+        ch=str[j];
+	}
+}
+BTNode *FindNode(BTNode *b,ElemType x) //返回data域为x的节点指针
+{
+	BTNode *p;
+    if (b==NULL)  return NULL;
+    else 
+		if (b->data==x)  return b;
+		else
+		{ 
+			p=FindNode(b->lchild,x);
+            if (p!=NULL) return p;
+            else return FindNode(b->rchild,x);
+ }
+}
+BTNode *LchildNode(BTNode *p) //返回*p节点的左孩子节点指针
+{
+	return p->lchild;
+}
+BTNode *RchildNode(BTNode *p) //返回*p节点的右孩子节点指针
+{
+    return p->rchild;
+}
+int BTNodeDepth(BTNode *b) //求二叉树b的深度
+{
+    int lchilddep,rchilddep;
+    if (b==NULL) 
+  return(0);        //空树的高度为0
+    else  
+	{ 
+		lchilddep=BTNodeDepth(b->lchild); //求左子树的高度为lchilddep
+        rchilddep=BTNodeDepth(b->rchild); //求右子树的高度为rchilddep
+        return (lchilddep>rchilddep)? (lchilddep+1):(rchilddep+1);//子树高度加一（根的结点）
+    }
+}
+void DispBTNode(BTNode *b) //以括号表示法输出二叉树
+{
+ if (b!=NULL)//不为空树时
+ {
+  printf("%c",b->data);
+  if (b->lchild!=NULL || b->rchild!=NULL)
+  {
+	  printf("(");//还有结点时，括号包含下一层
+      DispBTNode(b->lchild);//递归
+      if (b->rchild!=NULL) printf(",");//(a,b)该结点的左右孩子
+      DispBTNode(b->rchild);
+      printf(")");
+  }
+ }
+}
+
+
+void PreOrder(BTNode *b){     //先序遍历
+    BTNode *stack[15];
+    int top = -1;
+    BTNode *p = b;
+    while(p!=NULL||top!=-1){//当前节点不为空或者栈不为空时进入循环
+        if(p!=NULL){//当前结点不为空
+
+            stack[++ top] = p;//前序遍历 访问结点 入栈
+            printf("%c ",p->data); //输出结点
+            p = p->lchild;//继续访问结点左孩子
+
+		}else{//当前结点为空，但栈不为空时
+
+            p = stack[top --];//前序遍历 出栈
+            p = p->rchild;//访问结点右孩子
+
+        }
+    }
+}
+//中序遍历与前序遍历大致相同
+void InOrder(BTNode *b){      //中序遍历
+    BTNode  *stack[15];
+    int top = -1;
+    BTNode  *p = b;
+    while(p!=NULL||top!=-1){
+        if(p!=NULL){
+
+            stack[++ top] = p;//中序遍历 访问结点 入栈
+            p = p->lchild;//继续访问下一个左结点
+
+        }else{
+
+            p = stack[top --];//中序遍历 访问结点 出栈
+            printf("%c ",p->data);  //输出结点
+            p = p->rchild;//访问结点右孩子
+        }
+    }
+}
+
+void PostOrder(BTNode *b){     //后序遍历
+    BTNode *stack[15];
+    int top = -1;
+    int flagStack[15];   //记录每个节点访问次数栈
+    BTNode  *p = b;
+    while(p!=NULL||top!=-1){
+        if(p!=NULL){     //第一次访问，flag置1，入栈
+
+            stack[++ top] = p;
+            flagStack[top] = 1;   
+            p = p->lchild;
+
+        }else{//（p == NULL）
+
+            if(flagStack[top] == 1){  //第二次访问，flag置2，取栈顶元素但不出栈
+
+                p = stack[top];
+                flagStack[top] = 2;
+                p = p->rchild;
+
+            }else{         //第三次访问，出栈
+
+                p = stack[top --];
+                printf("%c ",p->data);    //出栈时，访问输出
+                p = NULL;      //p置空，以便继续退栈
+            }
+        }
+    }
+}
+void LevelOrder(BTNode *b)//广义优先算法 层次遍历
+//从第一层开始，每层从左到右遍历
+{
+	BTNode *Queue[20];//用一维数组表示队列，front和rear分别表示队首和队尾指针
+	BTNode *t;
+
+	int front,rear;
+	front=rear=0;
+	if(b)//当树不为空时
+	{
+		Queue[rear++]=b;//根节点入栈
+		while(front!=rear)//当队列非空时
+		{
+			t=Queue[front++];//队首元素出队列，并访问这个结点
+			printf("%c ",t->data);
+			if(t->lchild)//当前节点左子树不为空时，入队列
+				Queue[rear++]=t->lchild;
+			if(t->rchild)//当前结点右子树不为空时，入队列
+				Queue[rear++]=t->rchild;
+		}
+	}
+}
+
+
+
+
+
+int BTWidth(BTNode *b)  //求二叉树b的宽度   即找到二叉树中那一层结点最多！
+{
+ struct 
+ {
+  int lno;  //节点的层次编号
+  BTNode *p;  //节点指针
+ } Qu[MaxSize];  //定义顺序非循环队列
+ int front,rear;       //定义队首和队尾指针
+ int lnum,max,i,n;
+ front=rear=0;       //置队列为空队
+    if (b!=NULL) 
+ {
+  rear++; 
+  Qu[rear].p=b;      //根节点指针入队
+  Qu[rear].lno=1;      //根节点的层次编号为1
+  while (rear!=front)     //队列不为空
+  {
+   front++;
+   b=Qu[front].p;     //队头出队
+   lnum=Qu[front].lno;
+   if (b->lchild!=NULL)   //左孩子入队
+   {
+    rear++;
+    Qu[rear].p=b->lchild;
+    Qu[rear].lno=lnum+1;
+   }
+   if (b->rchild!=NULL)   //右孩子入队
+   {
+    rear++;
+    Qu[rear].p=b->rchild;
+    Qu[rear].lno=lnum+1;
+   }
+  }
+  max=0;lnum=1;i=1;
+  while (i<=rear)
+  {
+   n=0;
+   while (i<=rear && Qu[i].lno==lnum) 
+   {
+    n++;i++;
+   }
+   lnum=Qu[i].lno;
+   if (n>max) max=n;
+  }
+  return max;
+ }
+ else
+  return 0;
+}
+int Nodes(BTNode *b) //求二叉树b的节点个数
+{
+ int num1,num2;
+    if (b==NULL)//空树 
+  return 0;
+    else if (b->lchild==NULL && b->rchild==NULL) //无后续结点
+  return 1;
+    else
+    {
+        num1=Nodes(b->lchild);
+        num2=Nodes(b->rchild);
+        return (num1+num2+1);//递归求结点数 
+ }
+}
+int LeafNodes(BTNode *b) //求二叉树b的叶子节点个数
+{
+ int num1,num2;
+    if (b==NULL) 
+  return 0;
+    else if (b->lchild==NULL && b->rchild==NULL) 
+  return 1;
+    else
+    {
+        num1=LeafNodes(b->lchild);
+        num2=LeafNodes(b->rchild);
+        return (num1+num2);//递归求不再有子树的结点个数
+ }
+}
+void DestroyBTNode(BTNode *&b)//销毁树
+{
+ if (b!=NULL)
+ {
+  DestroyBTNode(b->lchild);
+  DestroyBTNode(b->rchild);
+  free(b);
+ }
+}
+int main()
+{ 
+	BTNode *b,*p,*lp,*rp;
+    CreateBTNode(b,"A(B(D,E(H(J,K(L,M(,N))))),C(F,G(,I)))");//这是我们设定的一个二叉树，可以任意更改
+    printf("二叉树的基本运算如下:\n");
+ 
+    printf("\n  (1)输出二叉树:");
+    DispBTNode(b);
+ 
+    printf("\n  (2)先序遍历结果:");
+    PreOrder(b);
+    printf("\n  (3)中序遍历结果:");
+    InOrder(b);
+    printf("\n  (4)后序遍历结果:");
+    PostOrder(b);
+	printf("\n  (5)层次遍历结果:");
+	LevelOrder(b);
+
+    printf("\n  (6) B节点:");//找到h结点的左右孩子
+    p=FindNode(b,'B');
+    if (p!=NULL)
+	{ 
+		lp=LchildNode(p);
+        if (lp!=NULL) 
+        printf("左孩子为%c ",lp->data);
+		else
+        printf("无左孩子 ");
+        rp=RchildNode(p);
+        if (rp!=NULL)
+        printf("右孩子为%c",rp->data);
+        else
+        printf("无右孩子 ");
+	}
+
+    
+    printf("\n  (7)二叉树b的深度:%d\n",BTNodeDepth(b));
+    printf("  (8)二叉树b的宽度:%d\n",BTWidth(b));
+    printf("  (9)二叉树b的节点个数:%d\n",Nodes(b));
+    printf("  (10)二叉树b的叶子节点个数:%d\n",LeafNodes(b));
+    printf("  (11)释放二叉树b\n");
+    DestroyBTNode(b);//输出之后将树销毁
+	printf("\n");
+    return 0;
+}
